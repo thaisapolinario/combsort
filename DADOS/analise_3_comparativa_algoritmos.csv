@@ -1,0 +1,49 @@
+Tamanho_N,Cenario,Algoritmo,Tempo_Execucao_s
+10,Lista Não Ordenada (Caso Médio),Comb Sort,0.00002593
+10,Lista Não Ordenada (Caso Médio),Bubble Sort,0.00002443
+10,Lista Não Ordenada (Caso Médio),Insertion Sort,0.00001541
+10,Lista Não Ordenada (Caso Médio),Selection Sort,0.00001934
+10,Lista Já Ordenada (Melhor Caso),Comb Sort,0.00001501
+10,Lista Já Ordenada (Melhor Caso),Bubble Sort,0.00000517
+10,Lista Já Ordenada (Melhor Caso),Insertion Sort,0.00000619
+10,Lista Já Ordenada (Melhor Caso),Selection Sort,0.00001719
+10,Lista Invertida (Pior Caso),Comb Sort,0.00001908
+10,Lista Invertida (Pior Caso),Bubble Sort,0.00002734
+10,Lista Invertida (Pior Caso),Insertion Sort,0.00001858
+10,Lista Invertida (Pior Caso),Selection Sort,0.00001655
+100,Lista Não Ordenada (Caso Médio),Comb Sort,0.00026583
+100,Lista Não Ordenada (Caso Médio),Bubble Sort,0.00130501
+100,Lista Não Ordenada (Caso Médio),Insertion Sort,0.00063565
+100,Lista Não Ordenada (Caso Médio),Selection Sort,0.00066350
+100,Lista Já Ordenada (Melhor Caso),Comb Sort,0.00016095
+100,Lista Já Ordenada (Melhor Caso),Bubble Sort,0.00001748
+100,Lista Já Ordenada (Melhor Caso),Insertion Sort,0.00002948
+100,Lista Já Ordenada (Melhor Caso),Selection Sort,0.00062590
+100,Lista Invertida (Pior Caso),Comb Sort,0.00020486
+100,Lista Invertida (Pior Caso),Bubble Sort,0.00126625
+100,Lista Invertida (Pior Caso),Insertion Sort,0.00028993
+100,Lista Invertida (Pior Caso),Selection Sort,0.00016292
+1000,Lista Não Ordenada (Caso Médio),Comb Sort,0.00128520
+1000,Lista Não Ordenada (Caso Médio),Bubble Sort,0.03667422
+1000,Lista Não Ordenada (Caso Médio),Insertion Sort,0.01641953
+1000,Lista Não Ordenada (Caso Médio),Selection Sort,0.01701979
+1000,Lista Já Ordenada (Melhor Caso),Comb Sort,0.00083500
+1000,Lista Já Ordenada (Melhor Caso),Bubble Sort,0.00004381
+1000,Lista Já Ordenada (Melhor Caso),Insertion Sort,0.00008221
+1000,Lista Já Ordenada (Melhor Caso),Selection Sort,0.01700978
+1000,Lista Invertida (Pior Caso),Comb Sort,0.00100346
+1000,Lista Invertida (Pior Caso),Bubble Sort,0.04928604
+1000,Lista Invertida (Pior Caso),Insertion Sort,0.03263151
+1000,Lista Invertida (Pior Caso),Selection Sort,0.01737793
+10000,Lista Não Ordenada (Caso Médio),Comb Sort,0.02156456
+10000,Lista Não Ordenada (Caso Médio),Bubble Sort,4.37103859
+10000,Lista Não Ordenada (Caso Médio),Insertion Sort,1.91975287
+10000,Lista Não Ordenada (Caso Médio),Selection Sort,1.83374836
+10000,Lista Já Ordenada (Melhor Caso),Comb Sort,0.01343650
+10000,Lista Já Ordenada (Melhor Caso),Bubble Sort,0.00046212
+10000,Lista Já Ordenada (Melhor Caso),Insertion Sort,0.00086090
+10000,Lista Já Ordenada (Melhor Caso),Selection Sort,1.76545391
+10000,Lista Invertida (Pior Caso),Comb Sort,0.01554091
+10000,Lista Invertida (Pior Caso),Bubble Sort,5.56284837
+10000,Lista Invertida (Pior Caso),Insertion Sort,3.64458049
+10000,Lista Invertida (Pior Caso),Selection Sort,1.68780933

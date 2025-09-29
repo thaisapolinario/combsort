@@ -1,0 +1,13 @@
+Tamanho_N,Cenario,Tempo_Execucao_s
+10,Caso Médio (Aleatoria),1.161599993793061e-05
+10,Melhor Caso (Ordenada),5.904999852646142e-06
+10,Pior Caso (Invertida),4.2669998947530985e-06
+100,Caso Médio (Aleatoria),0.00010773600001812156
+100,Melhor Caso (Ordenada),3.898499994647864e-05
+100,Pior Caso (Invertida),5.085500015411526e-05
+1000,Caso Médio (Aleatoria),0.0013296769998305535
+1000,Melhor Caso (Ordenada),0.000814994999927876
+1000,Pior Caso (Invertida),0.000957136999886643
+10000,Caso Médio (Aleatoria),0.022331209999947532
+10000,Melhor Caso (Ordenada),0.012412110000013854
+10000,Pior Caso (Invertida),0.014236843999924531

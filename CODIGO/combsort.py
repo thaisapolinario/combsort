@@ -5,7 +5,7 @@ import sys # aumenta o limite de recursão
 import csv
 import os
 
-NOME_PASTA = "DADOS"
+NOME_PASTA = "../DADOS"
 FICHEIRO_TEMPO_MEMORIA = "analise_1_tempo_memoria.csv"
 FICHEIRO_TIPOS_ENTRADA = "analise_2_tipos_entrada_combsort.csv"
 FICHEIRO_COMPARATIVO = "analise_3_comparativa_algoritmos.csv"
@@ -54,6 +54,26 @@ def tim_sort(lista):
     return lista
 
 
+def insertion_sort(lista):
+    for i in range(1, len(lista)):
+        chave = lista[i]
+        j = i - 1
+        while j >= 0 and chave < lista[j]:
+            lista[j + 1] = lista[j]
+            j -= 1
+        lista[j + 1] = chave
+    return lista
+
+def selection_sort(lista):
+    for i in range(len(lista)):
+        idx_minimo = i
+        for j in range(i + 1, len(lista)):
+            if lista[j] < lista[idx_minimo]:
+                idx_minimo = j
+        lista[i], lista[idx_minimo] = lista[idx_minimo], lista[i]
+    return lista
+
+
 def gerar_lista_aleatoria(tamanho):
     return [random.randint(0, tamanho) for _ in range(tamanho)]
 
@@ -97,7 +117,6 @@ def executar_analise_tempo_memoria(tamanho_entrada):
 
 # Análise 2
 def analise_diferentes_entradas(tamanho_lista):
-    print(f"\n--- Análise por Tipo de Entrada (Comb Sort) para N = {tamanho_lista:,} ---")
     cabecalho = ['Tamanho_N', 'Cenario', 'Tempo_Execucao_s']
     cenarios = {
         "Caso Médio (Aleatoria)": gerar_lista_aleatoria,
@@ -117,16 +136,15 @@ def analise_diferentes_entradas(tamanho_lista):
 
 # Análise 4
 def analise_comparativa(tamanho_lista):
-
-    print("=" * 60)
-    print(f"ANÁLISE COMPARATIVA PARA N = {tamanho_lista:,}")
-    print("=" * 60)
     cabecalho = ['Tamanho_N', 'Cenario', 'Algoritmo', 'Tempo_Execucao_s']
 
     algoritmos = {
         "Comb Sort": combsort,
-        "Bubble Sort": bubble_sort
+        "Bubble Sort": bubble_sort,
+        "Insertion Sort": insertion_sort,
+        "Selection Sort": selection_sort
     }
+    
 
     cenarios = {
         "Lista Não Ordenada (Caso Médio)": gerar_lista_aleatoria,
@@ -134,15 +152,10 @@ def analise_comparativa(tamanho_lista):
         "Lista Invertida (Pior Caso)": gerar_lista_invertida
     }
 
-    # Loop principal: para cada cenário, testa cada algoritmo
     for nome_cenario, func_geradora in cenarios.items():
-        print(f"\n--- Cenário: {nome_cenario} ---")
-        
-        # Gera a lista original para este cenário uma vez
         lista_original = func_geradora(tamanho_lista)
         
         for nome_algo, func_algo in algoritmos.items():
-
             lista_para_ordenar = lista_original.copy()
             
             inicio = time.perf_counter()
@@ -150,7 +163,8 @@ def analise_comparativa(tamanho_lista):
             fim = time.perf_counter()
             tempo_execucao = fim - inicio
             tempo_formatado = f'{tempo_execucao:.8f}'
-            salvar_em_csv(FICHEIRO_COMPARATIVO, cabecalho, [tamanho_lista, nome_cenario, nome_algo, tempo_execucao])
+            
+            salvar_em_csv(FICHEIRO_COMPARATIVO, cabecalho, [tamanho_lista, nome_cenario, nome_algo, tempo_formatado])
             
 
 
@@ -183,18 +197,18 @@ def menu_principal():
     
     while True:
         print("\n" + "="*60)
-        print(" ESCOLHA A ANÁLISE DE ESCALABILIDADE QUE DESEJA EXECUTAR")
+        print(" ESCOLHA UMA ANÁLISE: ")
         print("="*60)
-        print("1. Análise de Tempo e Memória (Comb Sort)")
-        print("2. Análise por Tipo de Entrada (Comb Sort)")
-        print("3. Análise Comparativa (Comb Sort vs. Bubble Sort)")
+        print("1. Análise de Tempo e Memória")
+        print("2. Análise por Tipo de Entrada")
+        print("3. Análise Comparativa")
         print("4. Sair")
         print("-" * 60)
         
         escolha = input("Digite o número da sua escolha: ")
 
         if escolha == '4':
-            print("Programa finalizado.")
+            print("FIM.")
             break
         
         if escolha in ['1', '2', '3']:
@@ -204,10 +218,9 @@ def menu_principal():
                 n_inicial = int(n_inicial_str)
                 num_passos = int(num_passos_str)
             except ValueError:
-                print("\nErro: Entradas inválidas. Por favor, digite apenas números inteiros.")
+                print("\nErro: Digite um número válido")
                 continue
 
-            # Mapeia a escolha para a função e o arquivo correspondente
             analises = {
                 '1': (executar_analise_tempo_memoria, FICHEIRO_TEMPO_MEMORIA),
                 '2': (analise_diferentes_entradas, FICHEIRO_TIPOS_ENTRADA),
@@ -217,11 +230,7 @@ def menu_principal():
             funcao_analise, nome_ficheiro = analises[escolha]
             caminho_ficheiro = os.path.join(NOME_PASTA, nome_ficheiro)
 
-            # Apaga o arquivo antigo para garantir uma nova análise limpa
-            if os.path.exists(caminho_ficheiro):
-                os.remove(caminho_ficheiro)
-                print(f"Arquivo antigo '{nome_ficheiro}' removido.")
-            
+ 
             tamanho_atual_n = n_inicial
             for i in range(num_passos):
                 funcao_analise(tamanho_atual_n)
@@ -229,7 +238,8 @@ def menu_principal():
             
             
         else:
-            print("Opção inválida. Por favor, escolha um número de 1 a 4.")
-# --- Ponto de Entrada do Script ---
+            print("\nErro: Digite um número válido")
+
+
 if __name__ == "__main__":
     menu_principal()
