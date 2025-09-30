@@ -16,8 +16,10 @@ O projeto utiliza a seguinte estrutura:
 
 combsort/                 
 ├── README.md              
-├── CODIGO/                
+├── CODIGO/    
+
 │   ├── combsort.py          # script principal para executar as análises
+
 │   ├── graficos.py          # script para gerar os gráficos
 │
 ├── DADOS/                 
