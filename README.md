@@ -1,7 +1,4 @@
 # Análise Comparativa de Algoritmos de Ordenação - CombSort
-
-Este projeto oferece uma ferramenta de linha de comando para realizar análises de desempenho de quatro algoritmos de ordenação, medindo o tempo de execução em diferentes cenários e gerando gráficos comparativos para visualização dos resultados.
-
 ## Funcionalidades
 
 - Análise: Compara o desempenho do Comb Sort em diversos casos.
