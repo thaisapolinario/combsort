@@ -230,6 +230,10 @@ def menu_principal():
             funcao_analise, nome_ficheiro = analises[escolha]
             caminho_ficheiro = os.path.join(NOME_PASTA, nome_ficheiro)
 
+            if os.path.exists(caminho_ficheiro):
+                os.remove(caminho_ficheiro)
+                print(f"\nAVISO: Arquivo de dados antigo '{nome_ficheiro}' foi removido para garantir uma nova análise limpa.")
+
  
             tamanho_atual_n = n_inicial
             for i in range(num_passos):

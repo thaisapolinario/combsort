@@ -4,7 +4,7 @@ import seaborn as sns
 import os
 
 NOME_PASTA_DADOS = "../DADOS" 
-NOME_PASTA_GRAFICOS = "." 
+NOME_PASTA_GRAFICOS = "../GRAFICOS"
 
 # Nomes dos arquivos de entrada
 FICHEIRO_1 = "analise_1_tempo_memoria.csv"
