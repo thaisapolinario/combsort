@@ -94,7 +94,7 @@ def salvar_em_csv(nome_ficheiro, cabecalho, linha_dados):
                 escritor_csv.writerow(cabecalho)
             escritor_csv.writerow(linha_dados)
     except IOError as e:
-        print(f"\n>>> Erro ao salvar linha no CSV '{caminho_completo}': {e}\n")
+        print(f"\nErro ao salvar linha no CSV '{caminho_completo}': {e}\n")
 
 # Análises 1 e 3
 def executar_analise_tempo_memoria(tamanho_entrada):
@@ -124,8 +124,8 @@ def analise_diferentes_entradas(tamanho_lista):
         "Pior Caso (Invertida)": gerar_lista_invertida
     }
 
-    for nome_cenario, func_geradora in cenarios.items():
-        lista_teste = func_geradora(tamanho_lista)
+    for nome_cenario, funcao_geradora in cenarios.items():
+        lista_teste = funcao_geradora(tamanho_lista)
         inicio = time.perf_counter()
         combsort(lista_teste)
         fim = time.perf_counter()
@@ -152,45 +152,20 @@ def analise_comparativa(tamanho_lista):
         "Lista Invertida (Pior Caso)": gerar_lista_invertida
     }
 
-    for nome_cenario, func_geradora in cenarios.items():
-        lista_original = func_geradora(tamanho_lista)
+    for nome_cenario, funcao_geradora in cenarios.items():
+        lista_original = funcao_geradora(tamanho_lista)
         
-        for nome_algo, func_algo in algoritmos.items():
+        for nome_algoritmo, funcao_algoritmo in algoritmos.items():
             lista_para_ordenar = lista_original.copy()
             
             inicio = time.perf_counter()
-            func_algo(lista_para_ordenar)
+            funcao_algoritmo(lista_para_ordenar)
             fim = time.perf_counter()
             tempo_execucao = fim - inicio
             tempo_formatado = f'{tempo_execucao:.8f}'
             
-            salvar_em_csv(FICHEIRO_COMPARATIVO, cabecalho, [tamanho_lista, nome_cenario, nome_algo, tempo_formatado])
+            salvar_em_csv(FICHEIRO_COMPARATIVO, cabecalho, [tamanho_lista, nome_cenario, nome_algoritmo, tempo_formatado])
             
-
-
-
-
-def salvar_linha_csv(dados_linha):
-    """
-    Adiciona uma única linha de dados ao ficheiro CSV consolidado.
-    Cria o ficheiro e o cabeçalho se não existirem.
-    """
-    nome_pasta = "DADOS"
-    nome_ficheiro = "resultados_analises.csv"
-    caminho_completo = os.path.join(nome_pasta, nome_ficheiro)
-    os.makedirs(nome_pasta, exist_ok=True)
-    
-    # Verifica se o ficheiro já existe para decidir se escreve o cabeçalho
-    ficheiro_existe = os.path.isfile(caminho_completo)
-    
-    try:
-        with open(caminho_completo, 'a', newline='', encoding='utf-8') as f:
-            escritor_csv = csv.writer(f)
-            if not ficheiro_existe:
-                escritor_csv.writerow(['Timestamp', 'Tamanho_N', 'Cenario', 'Algoritmo', 'Metrica', 'Valor', 'Unidade'])
-            escritor_csv.writerow(dados_linha)
-    except IOError as e:
-        print(f"\n>>> Erro ao salvar a linha no CSV: {e}\n")
 
 def menu_principal():
     os.makedirs(NOME_PASTA, exist_ok=True)
@@ -213,10 +188,10 @@ def menu_principal():
         
         if escolha in ['1', '2', '3']:
             try:
-                n_inicial_str = input("Digite o N inicial (ex: 10): ")
+                inicio = input("Digite o N inicial (ex: 10): ")
                 num_passos_str = input("Digite o número de passos (ex: 4 para ir até 10.000): ")
-                n_inicial = int(n_inicial_str)
-                num_passos = int(num_passos_str)
+                n_inicial = int(inicio)
+                passos = int(num_passos_str)
             except ValueError:
                 print("\nErro: Digite um número válido")
                 continue
@@ -236,7 +211,7 @@ def menu_principal():
 
  
             tamanho_atual_n = n_inicial
-            for i in range(num_passos):
+            for i in range(passos):
                 funcao_analise(tamanho_atual_n)
                 tamanho_atual_n *= 10
             
