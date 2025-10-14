@@ -21,6 +21,9 @@ def combsort (lista):
     tamanho = len(lista)
     intervalo = tamanho
 
+    num_comparacoes = 0 
+
+
     troca = True
 
     while intervalo !=1 or troca:
@@ -30,10 +33,11 @@ def combsort (lista):
         troca = False
 
         for i in range(0, tamanho-intervalo):
+            num_comparacoes += 1
             if lista[i] > lista[i + intervalo]:
                 lista[i], lista[i + intervalo]=lista[i + intervalo], lista[i]
                 troca = True
-    return lista
+    return lista, num_comparacoes
                 
 def bubble_sort(lista):
 
@@ -98,26 +102,31 @@ def salvar_em_csv(nome_ficheiro, cabecalho, linha_dados):
 
 # Análises 1 e 3
 def executar_analise_tempo_memoria(tamanho_entrada):
-    cabecalho = ['Tamanho_N', 'Tempo_Execucao_s']
+    cabecalho_metrica = ['Tamanho_N', 'Metrica', 'Valor']
+    
     lista_aleatoria = gerar_lista_aleatoria(tamanho_entrada)
     inicio = time.perf_counter()
-    combsort(lista_aleatoria)
+    combsort(lista_aleatoria) 
     fim = time.perf_counter()
     tempo_execucao = fim - inicio
-    salvar_em_csv(FICHEIRO_TEMPO_MEMORIA, cabecalho, [tamanho_entrada, tempo_execucao ])
-
-    lista_para_memoria = gerar_lista_aleatoria(tamanho_entrada)
-    tracemalloc.start()
-    combsort(lista_para_memoria)
-    memoria_pico = tracemalloc.get_traced_memory()[1]
-    tracemalloc.stop()
-    tempo_formatado = f'{tempo_execucao:.8f}'
-    salvar_em_csv(FICHEIRO_TEMPO_MEMORIA, cabecalho, [tamanho_entrada, memoria_pico])
     
+    salvar_em_csv(FICHEIRO_TEMPO_MEMORIA, cabecalho_metrica, [tamanho_entrada, 'Tempo_Execucao_s', tempo_execucao]) 
+
+    tracemalloc.start()
+    
+    lista_para_memoria = gerar_lista_aleatoria(tamanho_entrada) 
+    
+    combsort(lista_para_memoria)
+    
+    memoria_pico = tracemalloc.get_traced_memory()[1] 
+    tracemalloc.stop()
+    
+    salvar_em_csv(FICHEIRO_TEMPO_MEMORIA, cabecalho_metrica, [tamanho_entrada, 'Memoria_Pico_Bytes', memoria_pico])
 
 # Análise 2
 def analise_diferentes_entradas(tamanho_lista):
-    cabecalho = ['Tamanho_N', 'Cenario', 'Tempo_Execucao_s']
+    cabecalho = ['Tamanho_N', 'Cenario', 'Num_Comparacoes']
+    
     cenarios = {
         "Caso Médio (Aleatoria)": gerar_lista_aleatoria,
         "Melhor Caso (Ordenada)": gerar_lista_ordenada,
@@ -126,12 +135,11 @@ def analise_diferentes_entradas(tamanho_lista):
 
     for nome_cenario, funcao_geradora in cenarios.items():
         lista_teste = funcao_geradora(tamanho_lista)
-        inicio = time.perf_counter()
-        combsort(lista_teste)
-        fim = time.perf_counter()
-        tempo_execucao = fim - inicio
-        tempo_formatado = f'{tempo_execucao:.8f}'
-        salvar_em_csv(FICHEIRO_TIPOS_ENTRADA, cabecalho, [tamanho_lista, nome_cenario, tempo_execucao])
+        
+        _, num_comparacoes = combsort(lista_teste) 
+        
+        # Salva o número de comparações no CSV
+        salvar_em_csv(FICHEIRO_TIPOS_ENTRADA, cabecalho, [tamanho_lista, nome_cenario, num_comparacoes])
 
 
 # Análise 4
@@ -149,7 +157,6 @@ def analise_comparativa(tamanho_lista):
     cenarios = {
         "Lista Não Ordenada (Caso Médio)": gerar_lista_aleatoria,
         "Lista Já Ordenada (Melhor Caso)": gerar_lista_ordenada,
-        "Lista Invertida (Pior Caso)": gerar_lista_invertida
     }
 
     for nome_cenario, funcao_geradora in cenarios.items():
@@ -170,6 +177,10 @@ def analise_comparativa(tamanho_lista):
 def menu_principal():
     os.makedirs(NOME_PASTA, exist_ok=True)
     
+    # Define o passo de 5.000 fixo para a Progressão Aritmética
+    PASSO_INCREMENTO = 5000
+    LIMITE_ALTA_RESOLUCAO = 100000
+    
     while True:
         print("\n" + "="*60)
         print(" ESCOLHA UMA ANÁLISE: ")
@@ -189,11 +200,17 @@ def menu_principal():
         if escolha in ['1', '2', '3']:
             try:
                 inicio = input("Digite o N inicial (ex: 10): ")
-                num_passos_str = input("Digite o número de passos (ex: 4 para ir até 10.000): ")
+                num_passos_str = input("Digite o número de passos [LOG] (ex: 4 para ir até 10.000.000 após o N=10k): ")
+                
                 n_inicial = int(inicio)
-                passos = int(num_passos_str)
+                passos_log = int(num_passos_str)
+                
+                if n_inicial <= 0 or passos_log <= 0:
+                    print("\nErro: N deve ser positivo e o número de passos deve ser maior que zero.")
+                    continue
+                
             except ValueError:
-                print("\nErro: Digite um número válido")
+                print("\nErro: Digite um número inteiro válido.")
                 continue
 
             analises = {
@@ -209,12 +226,28 @@ def menu_principal():
                 os.remove(caminho_ficheiro)
                 print(f"\nAVISO: Arquivo de dados antigo '{nome_ficheiro}' foi removido para garantir uma nova análise limpa.")
 
- 
+            
             tamanho_atual_n = n_inicial
-            for i in range(passos):
+            
+            print("\nIniciando Fase de Alta Resolução (+5000)...")
+            while tamanho_atual_n <= LIMITE_ALTA_RESOLUCAO:
+                print(f"-> Executando N = {tamanho_atual_n}")
+                funcao_analise(tamanho_atual_n)
+                
+                if tamanho_atual_n < PASSO_INCREMENTO:
+                    tamanho_atual_n = PASSO_INCREMENTO
+                else:
+                    tamanho_atual_n += PASSO_INCREMENTO
+            
+            tamanho_atual_n = 100000 
+            
+            print("\nIniciando Fase de Escalabilidade (x10)...")
+            for i in range(passos_log):
+                print(f"-> Executando N = {tamanho_atual_n}")
                 funcao_analise(tamanho_atual_n)
                 tamanho_atual_n *= 10
             
+            print(f"\nAnálise Híbrida concluída.")
             
         else:
             print("\nErro: Digite um número válido")
