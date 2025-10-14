@@ -16,7 +16,6 @@ os.makedirs(NOME_PASTA_GRAFICOS, exist_ok=True)
 
 # 1. FUNÇÃO DE FORMATAÇÃO PARA VALORES PEQUENOS (Eixo Y: Tempo)
 def time_formatter(y, pos):
-    """Formata rótulos do eixo Y para decimal, evitando notação científica para valores comuns."""
     if y >= 1.0:
         return f"{int(y)}"
     if y >= 0.1:
@@ -29,8 +28,6 @@ def time_formatter(y, pos):
     
 # 2. FUNÇÃO DE FORMATAÇÃO PARA INTEIROS GRANDES (Eixo X: N)
 def integer_formatter(x, pos):
-    """Formata rótulos do eixo X para números inteiros (10, 1000, 1000000), 
-    usando ponto como separador de milhar para melhor legibilidade."""
     x_int = int(x)
     return f'{x_int:,}'.replace(',', '.')
 
@@ -94,7 +91,7 @@ def grafico_1_tempo_e_memoria():
     ax1.get_legend().remove()
 
     # Salva o gráfico em PDF
-    caminho_saida = os.path.join(NOME_PASTA_GRAFICOS, '1_tempo_vs_memoria_combsort.pdf')
+    caminho_saida = os.path.join(NOME_PASTA_GRAFICOS, '1_tempo_vs_memoria_combsort.svg')
     plt.savefig(caminho_saida, dpi=300)
     plt.close()
 
@@ -109,7 +106,7 @@ def grafico_2_cenarios_combsort():
     plt.figure(figsize=(10, 6))
     
     sns.lineplot(data=df, x='Tamanho_N', y='Num_Comparacoes', hue='Cenario', marker='o') 
-    
+    print(df.columns)
     plt.title('Número de Comparações do Comb Sort por Cenário de Entrada')
     plt.xlabel('Tamanho da Lista (N)')
     plt.ylabel('Número de Comparações') 
@@ -120,7 +117,7 @@ def grafico_2_cenarios_combsort():
     
     plt.grid(True, which="both", ls="--")
     plt.legend(title='Cenário')
-    caminho_saida = os.path.join(NOME_PASTA_GRAFICOS, '2_comparacao_cenarios_combsort.pdf')
+    caminho_saida = os.path.join(NOME_PASTA_GRAFICOS, '2_comparacao_cenarios_combsort.svg')
     plt.savefig(caminho_saida, dpi=300) 
     plt.close()
 
@@ -152,7 +149,7 @@ def grafico_3_comparativo_algoritmos():
         plt.legend(title='Algoritmo')
         
         nome_arquivo_seguro = cenario.replace(' ', '_').replace('(', '').replace(')', '').lower()
-        caminho_saida = os.path.join(NOME_PASTA_GRAFICOS, f'3_comparativo_{nome_arquivo_seguro}.pdf')
+        caminho_saida = os.path.join(NOME_PASTA_GRAFICOS, f'3_comparativo_{nome_arquivo_seguro}.svg')
         plt.savefig(caminho_saida, dpi=300)
         plt.close()
 
