@@ -125,7 +125,7 @@ def executar_analise_tempo_memoria(tamanho_entrada):
 
 # Análise 2
 def analise_diferentes_entradas(tamanho_lista):
-    cabecalho = ['Tamanho_N', 'Cenario', 'Num_Comparacoes']
+    cabecalho = ['Tamanho_N', 'Cenario', 'Num_Comparacoes', 'Tempo_Execucao_s']
     
     cenarios = {
         "Caso Médio (Aleatoria)": gerar_lista_aleatoria,
@@ -137,9 +137,13 @@ def analise_diferentes_entradas(tamanho_lista):
         lista_teste = funcao_geradora(tamanho_lista)
         
         _, num_comparacoes = combsort(lista_teste) 
+        inicio = time.perf_counter()
+        _, num_comparacoes = combsort(lista_teste) 
+        fim = time.perf_counter()
+        tempo_execucao = fim - inicio
         
         # Salva o número de comparações no CSV
-        salvar_em_csv(FICHEIRO_TIPOS_ENTRADA, cabecalho, [tamanho_lista, nome_cenario, num_comparacoes])
+        salvar_em_csv(FICHEIRO_TIPOS_ENTRADA, cabecalho, [tamanho_lista, nome_cenario, num_comparacoes, tempo_execucao])
 
 
 # Análise 4
@@ -200,7 +204,7 @@ def menu_principal():
         if escolha in ['1', '2', '3']:
             try:
                 inicio = input("Digite o N inicial (ex: 10): ")
-                num_passos_str = input("Digite o número de passos [LOG] (ex: 4 para ir até 10.000.000 após o N=10k): ")
+                num_passos_str = input("Digite o número de passos: ")
                 
                 n_inicial = int(inicio)
                 passos_log = int(num_passos_str)
@@ -229,7 +233,6 @@ def menu_principal():
             
             tamanho_atual_n = n_inicial
             
-            print("\nIniciando Fase de Alta Resolução (+5000)...")
             while tamanho_atual_n <= LIMITE_ALTA_RESOLUCAO:
                 print(f"-> Executando N = {tamanho_atual_n}")
                 funcao_analise(tamanho_atual_n)
@@ -241,13 +244,11 @@ def menu_principal():
             
             tamanho_atual_n = 100000 
             
-            print("\nIniciando Fase de Escalabilidade (x10)...")
             for i in range(passos_log):
                 print(f"-> Executando N = {tamanho_atual_n}")
                 funcao_analise(tamanho_atual_n)
                 tamanho_atual_n *= 10
             
-            print(f"\nAnálise Híbrida concluída.")
             
         else:
             print("\nErro: Digite um número válido")
